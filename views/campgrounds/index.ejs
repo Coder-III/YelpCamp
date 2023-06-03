@@ -1,0 +1,40 @@
+<% layout('layout/boilerplate') %>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css">
+<!-- <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css"> -->
+<link rel="stylesheet" href="/stylesheets/markerClusterStyles.css">
+
+
+<div class="map" id="cluster-map"></div>
+    <h1>All Campgrounds</h1>
+    <div>
+        <a href="/campgrounds/add">Add a campground</a>
+    </div>
+        <% for (let campground of campgrounds) { %>
+            <div class="card mb-3" >
+                <div class="row">
+                    <div class="col-md-4">
+                        <% if (campground.images.length) { %>
+                            <img class="img-fluid" alt="" src="<%= campground.images[0].url %>">
+                        <% } else {%>
+                            <img src="https://res.cloudinary.com/ddgnwky9y/image/upload/v1684172869/YelpCamp/cvwerep82i51yv9qugl3.avif" class="img-fluid" alt="">
+                        <% } %>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title"><%= campground.title %></h5>
+                            <p class="card-text"><%= campground.description %></p>
+                            <p class="card-text">
+                                <small class="text-muted"><%= campground.location %></small>
+                            </p>
+                            <a href="/campgrounds/<%= campground._id %>" class="btn btn-primary">View <%= campground.title %></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+
+<script>
+    const campgrounds = <%- JSON.stringify(campgrounds) %>
+</script>
+
+<script src="/JavaScripts/clusterMap.js" ></script>
