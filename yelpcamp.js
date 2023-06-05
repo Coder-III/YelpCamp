@@ -17,8 +17,9 @@ const User = require('./models/user');
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
 const MongoStore = require('connect-mongo');
-// const dbUrl = process.env.DB_URL;
-const dbUrl = 'mongodb://127.0.0.1:27017/yelp-camp'
+const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/yelp-camp';
+const secret = process.env.SECRET || 'thisshouldbeabettersecret';
+const port = process.env.PORT || 3000;
 
 const userRoutes = require('./routes/users');
 const campgroundsRoutes = require('./routes/campgrounds');
@@ -45,7 +46,7 @@ app.use(helmet());
 const store = MongoStore.create({
     mongoUrl: dbUrl,
     crypto: {
-        secret: 'thisshouldbeabettersecret',
+        secret,
     },
     touchAfter: 24*60*60
 });
@@ -57,7 +58,7 @@ store.on('error', function (e) {
 const sessionConfig = {
     store,
     name: 'session',
-    secret: 'thisshouldbeabettersecret',
+    secret,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -110,7 +111,7 @@ app.use(
                 "'self'",
                 "blob:",
                 "data:",
-                "https://res.cloudinary.com/ddgnwky9y/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT! 
+                "https://res.cloudinary.com/ddgnwky9y/", 
                 "https://images.unsplash.com/",
                 "https://tile.openstreetmap.org/",
                 "https://unpkg.com/",
@@ -155,6 +156,6 @@ app.use((err, req, res, next) => {
     res.status(statusCode).render('error', {err});
 });
 
-app.listen(3000, ()=> {
-    console.log('Serving on port 3000');
+app.listen(port, ()=> {
+    console.log(`Serving on port ${port}`);
 });
