@@ -1,8 +1,14 @@
+// For seeding the Mongo Atlus DB
+// if (process.env.NODE_ENV !== "production") {
+//   require('dotenv').config();
+// }
+
 const mongoose = require('mongoose');
 const cities = require('./cities');
 const {places, descriptors} = require('./seedHelpers');
 const Campground = require('../models/campground');
-const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/yelp-camp';
+// const dbUrl = process.env.DB_URL; For seeding the Mongo Atlus DB
+const dbUrl = 'mongodb://127.0.0.1:27017/yelp-camp';
 
 
 mongoose.connect(dbUrl);
@@ -22,6 +28,7 @@ const seedDB = async () => {
         const price = Math.floor(Math.random() * 20) + 10;
         const camp = new Campground({
             author: '645547dc1ae8eab438610341',
+            // author: '647e1236236a8041405641d1', CampgroundCreator user on Mongo Atlus
             location: `${cities[random1000].city}, ${cities[random1000].state}`,
             title: `${sample(descriptors)} ${sample(places)}`,
             images: [
